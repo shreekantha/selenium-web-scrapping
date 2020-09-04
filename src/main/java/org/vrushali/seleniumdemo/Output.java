@@ -35,7 +35,6 @@ public class Output {
     private String total;
     private String result;
 
-
     public Output() {
 
     }
