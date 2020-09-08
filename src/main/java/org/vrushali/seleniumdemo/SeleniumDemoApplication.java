@@ -61,27 +61,36 @@ public class SeleniumDemoApplication implements CommandLineRunner {
 				Thread.sleep(10000);
 				driver.findElement(By.id("submit")).click();
 
-				String rawTerm = driver
-						.findElement(By.xpath(
-								"//*[@id=\"dataPrint\"]/div[2]/div/div/div[2]/div[1]/div/div/div[2]/div/div/div[1]/b"))
-						.getText();
-				term = rawTerm.split(":")[1].trim();
+				List<String> terms = new ArrayList<>();
 
-				List<WebElement> rows = driver.findElement(By.className("divTableBody"))
-						.findElements(By.className("divTableRow"));
+				List<WebElement> texts = driver.findElements(By.tagName("b"));
 
-				rows.remove(0);
-				for (WebElement e : rows) {
-					List<WebElement> cells = e.findElements(By.className("divTableCell"));
-					List<String> cellValues = new ArrayList<>();
-					for (WebElement c : cells) {
-						cellValues.add(c.getText());
+				for (WebElement text : texts) {
+					String rawTerm = text.getText();
+					if (rawTerm.contains("Semester")) {
+						terms.add(rawTerm.split(":")[1].trim());
 					}
-					outputs.add(new Output(usn, term, cellValues.get(0), cellValues.get(1), cellValues.get(2),
-							cellValues.get(3), cellValues.get(4), cellValues.get(5)));
+				}
+
+				int termCount = 0;
+				List<WebElement> divTableBodies = driver.findElements(By.className("divTableBody"));
+				for (WebElement tableBody : divTableBodies) {
+					List<WebElement> rows = tableBody.findElements(By.className("divTableRow"));
+					rows.remove(0);
+					for (WebElement e : rows) {
+						List<WebElement> cells = e.findElements(By.className("divTableCell"));
+						List<String> cellValues = new ArrayList<>();
+						for (WebElement c : cells) {
+							cellValues.add(c.getText());
+						}
+						outputs.add(new Output(usn, terms.get(termCount), cellValues.get(0), cellValues.get(1),
+								cellValues.get(2), cellValues.get(3), cellValues.get(4), cellValues.get(5)));
+					}
+					termCount++;
 				}
 				driver.close();
 			} catch (Exception e) {
+				e.printStackTrace();
 				driver.close();
 				failedUsns.add(usn);
 			} finally {
@@ -92,8 +101,6 @@ public class SeleniumDemoApplication implements CommandLineRunner {
 			writeDataToFile(outputs, term);
 		if (!failedUsns.isEmpty())
 			writeFailedUsn(failedUsns, term);
-		System.out.println(outputs);
-		System.out.println(failedUsns);
 	}
 
 	/**
@@ -103,7 +110,7 @@ public class SeleniumDemoApplication implements CommandLineRunner {
 	private void writeFailedUsn(List<String> failedUsns, String term) {
 		Writer writer = null;
 		try {
-			writer = new FileWriter("output/"+term + "_failedusn.csv");
+			writer = new FileWriter("output/" + term + "_failedusn.csv");
 			CSVWriter csvWriter = new CSVWriter(writer);
 			Object[] objs = failedUsns.toArray();
 			String[] usns = Arrays.copyOf(objs, objs.length, String[].class);
@@ -132,7 +139,7 @@ public class SeleniumDemoApplication implements CommandLineRunner {
 
 		try {
 
-			writer = new FileWriter("output/"+term + "_score.csv");
+			writer = new FileWriter("output/" + term + "_score.csv");
 			// Create Mapping Strategy to arrange the
 			// column name in order
 			ColumnPositionMappingStrategy<Output> mappingStrategy = new ColumnPositionMappingStrategy<Output>();
