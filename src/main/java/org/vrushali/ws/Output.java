@@ -34,6 +34,7 @@ public class Output {
     private String external;
     private String total;
     private String result;
+    private String identifier;
 
     public Output() {
 
@@ -48,9 +49,10 @@ public class Output {
      * @param external
      * @param total
      * @param result
+     * @param identifier
      */
     public Output(String usn, String term, String courseCode, String courseName, String internal, String external,
-                  String total, String result) {
+                  String total, String result,String identifier) {
         super();
         this.usn = usn;
         this.term = term;
@@ -60,6 +62,7 @@ public class Output {
         this.external = external;
         this.total = total;
         this.result = result;
+        this.identifier=identifier;
     }
 
     public String getUsn() {
@@ -126,12 +129,23 @@ public class Output {
         this.result = result;
     }
 
-    @Override
-    public String toString() {
-        return String.format(
-                "Output [usn=%s, term=%s, courseCode=%s, courseName=%s, internal=%s, external=%s, total=%s, result=%s]\n", usn,
-                term, courseCode, courseName, internal, external, total, result);
-    }
+    
+    public String getIdentifier() {
+		return identifier;
+	}
+
+	public void setIdentifier(String identifier) {
+		this.identifier = identifier;
+	}
+
+	@Override
+	public String toString() {
+		return String.format(
+				"Output [usn=%s, term=%s, courseCode=%s, courseName=%s, internal=%s, external=%s, total=%s, result=%s, identifier=%s]",
+				usn, term, courseCode, courseName, internal, external, total, result, identifier);
+	}
+
+	
 
 
 }
