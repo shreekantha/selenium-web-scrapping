@@ -42,7 +42,6 @@ public class WSApplication implements CommandLineRunner {
 	@Override
 	public void run(String... args) throws Exception {
 
-		// final String os = System.getProperty("os.name");
 		System.out.println("#####################################################################");
 		System.out.println(" Your running the script in " + os + " operating system");
 		System.out.println("#####################################################################");
