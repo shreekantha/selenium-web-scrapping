@@ -18,7 +18,7 @@
 /**
  *
  */
-package org.vrushali.seleniumdemo;
+package org.vrushali.ws;
 
 /**
  * @author spaneos

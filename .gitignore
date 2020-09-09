@@ -21,6 +21,10 @@ bin/
 *.iml
 *.ipr
 
+*.zip
+*.tar.gz
+chormedriver.exe
+web_scraping/
 ### NetBeans ###
 /nbproject/private/
 /nbbuild/
