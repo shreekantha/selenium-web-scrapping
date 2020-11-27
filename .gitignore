@@ -6,6 +6,10 @@ bin/
 !**/src/main/**/target/
 !**/src/test/**/target/
 
+##Webdriver
+chromedriver*
+
+
 ### STS ###
 .apt_generated
 .classpath

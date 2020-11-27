@@ -24,6 +24,7 @@ package org.vrushali.ws;
  * @author spaneos
  *
  */
+
 public class Output {
 
     private String usn;
@@ -33,6 +34,9 @@ public class Output {
     private String internal;
     private String external;
     private String total;
+    private String credits;
+    private String gradePoints;
+    private String grade;
     private String result;
     private String identifier;
 
@@ -40,32 +44,61 @@ public class Output {
 
     }
 
-    /**
-     * @param usn
-     * @param term
-     * @param courseCode
-     * @param courseName
-     * @param internal
-     * @param external
-     * @param total
-     * @param result
-     * @param identifier
-     */
-    public Output(String usn, String term, String courseCode, String courseName, String internal, String external,
-                  String total, String result,String identifier) {
-        super();
-        this.usn = usn;
-        this.term = term;
-        this.courseCode = courseCode;
-        this.courseName = courseName;
-        this.internal = internal;
-        this.external = external;
-        this.total = total;
-        this.result = result;
-        this.identifier=identifier;
-    }
+  
 
-    public String getUsn() {
+    /**
+	 * @param usn
+	 * @param term
+	 * @param courseCode
+	 * @param courseName
+	 * @param internal
+	 * @param external
+	 * @param total
+	 * @param credits
+	 * @param gradePoints
+	 * @param grade
+	 * @param result
+	 * @param identifier
+	 */
+	public Output(String usn, String term, String courseCode, String courseName, String internal, String external,
+			String total, String credits, String gradePoints, String grade, String result, String identifier) {
+		super();
+		this.usn = usn;
+		this.term = term;
+		this.courseCode = courseCode;
+		this.courseName = courseName;
+		this.internal = internal;
+		this.external = external;
+		this.total = total;
+		this.credits = credits;
+		this.gradePoints = gradePoints;
+		this.grade = grade;
+		this.result = result;
+		this.identifier = identifier;
+	}
+
+	
+	public Output(String usn, String term, String courseCode, String courseName, String internal, String external,
+			String total, String result, String identifier) {
+		super();
+		this.usn = usn;
+		this.term = term;
+		this.courseCode = courseCode;
+		this.courseName = courseName;
+		this.internal = internal;
+		this.external = external;
+		this.total = total;
+		
+		this.result = result;
+		this.identifier = identifier;
+	}
+
+
+	
+
+
+
+	public String getUsn() {
         return usn;
     }
 
@@ -120,8 +153,34 @@ public class Output {
     public void setTotal(String total) {
         this.total = total;
     }
+    
+    
 
-    public String getResult() {
+    public String getCredits() {
+		return credits;
+	}
+
+	public void setCredits(String credits) {
+		this.credits = credits;
+	}
+
+	public String getGradePoints() {
+		return gradePoints;
+	}
+
+	public void setGradePoints(String gradePoints) {
+		this.gradePoints = gradePoints;
+	}
+
+	public String getGrade() {
+		return grade;
+	}
+
+	public void setGrade(String grade) {
+		this.grade = grade;
+	}
+
+	public String getResult() {
         return result;
     }
 
