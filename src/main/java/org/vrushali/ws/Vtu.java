@@ -30,18 +30,17 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 
-
 /**
  * @author spaneos
  *
  */
 public class Vtu {
-	
+
 	/**
 	 * @throws InterruptedException
 	 * 
 	 */
-	
+
 	public static void srcapeTheDataFromVtu(String filePath, String url) throws InterruptedException {
 
 		List<Input> inputs = DataService.loadData(filePath);
@@ -71,8 +70,11 @@ public class Vtu {
 				Thread.sleep(10000);
 				driver.findElement(By.id("submit")).click();
 
+
 				identifier = driver.findElement(By.xpath("//*[@id=\"dataPrint\"]/div[2]/div/div/div[1]/b[2]"))
 						.getText();
+//				System.out.println("identifier:" + identifier);
+
 
 				List<WebElement> termElements = driver.findElements(By.tagName("b"));
 				List<String> terms = new ArrayList<>();
@@ -95,23 +97,27 @@ public class Vtu {
 						for (WebElement c : cells) {
 							cellValues.add(c.getText());
 						}
-						outputs.add(new Output(input.getUsn(), terms.get(termCount), cellValues.get(0), cellValues.get(1),
-								cellValues.get(2), cellValues.get(3), cellValues.get(4), cellValues.get(5),
-								identifier));
+						if (cellValues != null && cellValues.size() >= 6) {
+//							System.out.println("cell values:" + cellValues);
+
+							outputs.add(new Output(input.getUsn(), terms.get(termCount), cellValues.get(0),
+									cellValues.get(1), cellValues.get(2), cellValues.get(3), cellValues.get(4),
+									cellValues.get(5), identifier));
+						}
 					}
 					termCount++;
 				}
 				driver.close();
 			} catch (Exception e) {
 				e.printStackTrace();
-				driver.close();
+//				System.out.println("fialed usn:" + input.getUsn());
 				failedUsns.add(input.getUsn());
+				driver.close();
 			} finally {
 				driver.quit();
 			}
 		}
 		DataService.writeDataToFile(failedUsns, outputs);
 	}
-
 
 }
