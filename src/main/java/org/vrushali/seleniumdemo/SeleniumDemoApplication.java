@@ -65,6 +65,7 @@ public class SeleniumDemoApplication implements CommandLineRunner {
 						.findElement(By.xpath(
 								"//*[@id=\"dataPrint\"]/div[2]/div/div/div[2]/div[1]/div/div/div[2]/div/div/div[1]/b"))
 						.getText();
+				
 				term = rawTerm.split(":")[1].trim();
 
 				List<WebElement> rows = driver.findElement(By.className("divTableBody"))
