@@ -71,8 +71,10 @@ public class Vtu {
 				driver.findElement(By.id("submit")).click();
 
 
-				identifier = driver.findElement(By.xpath("//*[@id=\"dataPrint\"]/div[2]/div/div/div[1]/b[2]"))
+				identifier = driver.findElement(By.xpath("//*[@id="dataPrint"]/div[1]/div/div[2]/div[2]/div[1]/div/div/div[2]/div/div/div[1]/b"))
 						.getText();
+				//*[@id="dataPrint"]/div[1]/div/div[2]/div[2]/div[1]/div/div/div[2]/div/div/div[1]/b
+				//*[@id="dataPrint"]/div[1]/div/div[2]/div[2]/div[1]/div/div/div[2]/div/div/div[1]/b
 //				System.out.println("identifier:" + identifier);
 
 
