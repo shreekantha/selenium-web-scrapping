@@ -1,13 +1,13 @@
 
 /*******************************************************************************
  * Copyright 2020  Vrushali Foundation
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License.  You may obtain a copy
  * of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the
@@ -16,7 +16,7 @@
  ******************************************************************************/
 
 /**
- * 
+ *
  */
 package org.vrushali.ws;
 
@@ -25,9 +25,7 @@ import static org.vrushali.ws.WSApplication.identifier;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
 
 /**
@@ -38,7 +36,7 @@ public class Vtu {
 
 	/**
 	 * @throws InterruptedException
-	 * 
+	 *
 	 */
 
 	public static void srcapeTheDataFromVtu(String filePath, String url) throws InterruptedException {
@@ -71,12 +69,11 @@ public class Vtu {
 				driver.findElement(By.id("submit")).click();
 
 
-				identifier = driver.findElement(By.xpath("//*[@id="dataPrint"]/div[1]/div/div[2]/div[2]/div[1]/div/div/div[2]/div/div/div[1]/b"))
+				identifier = driver.findElement(By.xpath("//*[@id=\"dataPrint\"]/div[1]/div/div[2]/div[2]/div[1]/div/div/div[2]/div/div/div[1]/b"))
 						.getText();
 				//*[@id="dataPrint"]/div[1]/div/div[2]/div[2]/div[1]/div/div/div[2]/div/div/div[1]/b
 				//*[@id="dataPrint"]/div[1]/div/div[2]/div[2]/div[1]/div/div/div[2]/div/div/div[1]/b
 //				System.out.println("identifier:" + identifier);
-
 
 				List<WebElement> termElements = driver.findElements(By.tagName("b"));
 				List<String> terms = new ArrayList<>();
@@ -110,13 +107,21 @@ public class Vtu {
 					termCount++;
 				}
 				driver.close();
-			} catch (Exception e) {
+			}catch (UnhandledAlertException f) {
+                // Code to switch to and handle the alert
+                assert driver != null;
+                Alert alert = driver.switchTo().alert();
+                alert.accept();
+                failedUsns.add(input.getUsn());
+                driver.close();
+            } catch (Exception e) {
 				e.printStackTrace();
-//				System.out.println("fialed usn:" + input.getUsn());
+//				System.out.println("failed usn:" + input.getUsn());
 				failedUsns.add(input.getUsn());
 				driver.close();
 			} finally {
-				driver.quit();
+                assert driver!= null;
+                driver.quit();
 			}
 		}
 		DataService.writeDataToFile(failedUsns, outputs);
