@@ -27,6 +27,10 @@ import java.util.List;
 
 import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author spaneos
@@ -34,7 +38,9 @@ import org.openqa.selenium.chrome.ChromeDriver;
  */
 public class Vtu {
 
-	/**
+    private static final Logger log = LoggerFactory.getLogger(Vtu.class);
+
+    /**
 	 * @throws InterruptedException
 	 *
 	 */
@@ -66,11 +72,30 @@ public class Vtu {
 				driver.findElement(By.xpath("//*[@id=\"raj\"]/div[1]/div/input")).sendKeys(input.getUsn());
 				driver.findElement(By.xpath("//*[@id=\"raj\"]/div[2]/div[1]/input")).sendKeys("");
 				Thread.sleep(10000);
-				driver.findElement(By.id("submit")).click();
+                try {
+                    driver.findElement(By.id("submit")).click();
+                    // 2. Check for the "Invalid USN" alert immediately
+                    WebDriverWait wait = new WebDriverWait(driver, 2);
+                    Alert alert = wait.until(ExpectedConditions.alertIsPresent());
+
+                    System.out.println("Error from VTU: " + alert.getText());
+                    failedUsns.add(input.getUsn());
+                    driver.close();
+                    alert.accept(); // Close the popup
+                    // Stop processing this USN and move to the next one
+                    return;
+
+                }catch (TimeoutException f) {
+                    // Code to switch to and handle the alert
+
+                    log.info("no alert present");
 
 
-				identifier = driver.findElement(By.xpath("//*[@id=\"dataPrint\"]/div[1]/div/div[2]/div[2]/div[1]/div/div/div[2]/div/div/div[1]/b"))
-						.getText();
+                }
+
+                identifier = driver.findElement(By.xpath("//*[@id=\"dataPrint\"]/div[1]/div/div[2]/div[2]/div[1]/div/div/div[2]/div/div/div[1]/b"))
+                    .getText();
+
 				//*[@id="dataPrint"]/div[1]/div/div[2]/div[2]/div[1]/div/div/div[2]/div/div/div[1]/b
 				//*[@id="dataPrint"]/div[1]/div/div[2]/div[2]/div[1]/div/div/div[2]/div/div/div[1]/b
 //				System.out.println("identifier:" + identifier);
@@ -107,14 +132,7 @@ public class Vtu {
 					termCount++;
 				}
 				driver.close();
-			}catch (UnhandledAlertException f) {
-                // Code to switch to and handle the alert
-                assert driver != null;
-                Alert alert = driver.switchTo().alert();
-                alert.accept();
-                failedUsns.add(input.getUsn());
-                driver.close();
-            } catch (Exception e) {
+			} catch (Exception e) {
 				e.printStackTrace();
 //				System.out.println("failed usn:" + input.getUsn());
 				failedUsns.add(input.getUsn());
