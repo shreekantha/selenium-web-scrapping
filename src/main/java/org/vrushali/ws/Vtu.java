@@ -23,6 +23,7 @@ package org.vrushali.ws;
 import static org.vrushali.ws.WSApplication.identifier;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.openqa.selenium.*;
@@ -93,43 +94,57 @@ public class Vtu {
 
                 }
 
-                identifier = driver.findElement(By.xpath("//*[@id=\"dataPrint\"]/div[1]/div/div[2]/div[2]/div[1]/div/div/div[2]/div/div/div[1]/b"))
+                identifier = driver.findElement(By.xpath("//*[@id=\"dataPrint\"]/div[2]/div/div/div[2]/div/div/div[2]/div/div[1]/b"))
                     .getText();
+                //*[@id="dataPrint"]/div[2]/div/div/div[2]/div/div/div[2]/div/div[1]/b
 
-				//*[@id="dataPrint"]/div[1]/div/div[2]/div[2]/div[1]/div/div/div[2]/div/div/div[1]/b
-				//*[@id="dataPrint"]/div[1]/div/div[2]/div[2]/div[1]/div/div/div[2]/div/div/div[1]/b
 //				System.out.println("identifier:" + identifier);
 
 				List<WebElement> termElements = driver.findElements(By.tagName("b"));
 				List<String> terms = new ArrayList<>();
-
+//                System.out.println("termelements:"+termElements);
 				for (WebElement termElement : termElements) {
 					String rawTerm = termElement.getText();
-					if (rawTerm.contains("Semester")) {
-						terms.add(rawTerm.split(":")[1].trim());
+//                    System.out.println("rawTerm:"+rawTerm);
+
+                    if (rawTerm.contains("Semester")) {
+//                        System.out.println("contains Semester:"+rawTerm);
+//                        System.out.println("split: "+ Arrays.toString(rawTerm.split(":")));
+
+                        terms.add(rawTerm.split(":")[1].trim());
 					}
 				}
 
 				int termCount = 0;
+                boolean isResultExtracted=false;
 				List<WebElement> divTableBodies = driver.findElements(By.className("divTableBody"));
+//                System.out.println("divTableBodies:"+divTableBodies.size());
 				for (WebElement tableBody : divTableBodies) {
+//                    System.out.println("termcount:"+termCount);
 					List<WebElement> rows = tableBody.findElements(By.className("divTableRow"));
+//                    System.out.println("rows before remove:"+rows);
 					rows.remove(0);
-					for (WebElement e : rows) {
+//                    System.out.println("rows after remove:"+rows);
+
+                    for (WebElement e : rows) {
+//                        System.out.println("rows:"+e);
 						List<WebElement> cells = e.findElements(By.className("divTableCell"));
 						List<String> cellValues = new ArrayList<>();
 						for (WebElement c : cells) {
 							cellValues.add(c.getText());
 						}
 						if (cellValues != null && cellValues.size() >= 6) {
+//                            System.out.println("terms.get(termCount):"+terms.get(termCount));
 //							System.out.println("cell values:" + cellValues);
 
 							outputs.add(new Output(input.getUsn(), terms.get(termCount), cellValues.get(0),
 									cellValues.get(1), cellValues.get(2), cellValues.get(3), cellValues.get(4),
 									cellValues.get(5), identifier));
+                            isResultExtracted=true;
 						}
 					}
-					termCount++;
+                    if(isResultExtracted)
+					    termCount++;
 				}
 				driver.close();
 			} catch (Exception e) {
