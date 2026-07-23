@@ -3,9 +3,13 @@ package org.vrushali.ws;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.core.env.Environment;
+
+import javax.annotation.PostConstruct;
 
 @SpringBootApplication
 public class WSApplication implements CommandLineRunner {
@@ -16,7 +20,18 @@ public class WSApplication implements CommandLineRunner {
 
 	public static String fileName = "";
 	public static String identifier = "";
-	public static final String os = System.getProperty("os.name");
+//	public static final String os = System.getProperty("os.name");
+
+    @Autowired
+    private Environment env;
+
+    public static String os;
+    @PostConstruct
+    public void init() {
+        os = env.getProperty("os.name");
+        System.out.println("Scraping running in OS:"+os);
+    }
+
 
 	@Override
 	public void run(String... args) throws Exception {
@@ -56,12 +71,12 @@ public class WSApplication implements CommandLineRunner {
 			case "3":
 				SMS.scrape(sc);
 				break;
-				
+
 			case "4":
 				System.out.println("Hope you are doing good.");
 				System.out.println("Goodbye....");
 				System.exit(0);
-				
+
 			default:
 				System.out.println("Soooory, You have chosen the wrong option");
 				System.out.println("Goodbye....");
@@ -74,8 +89,8 @@ public class WSApplication implements CommandLineRunner {
 		}
 
 	}
-	
-	
+
+
 	private void ScrapeUniversities(String... args) {
 		String url=args[0];
 		if ("Linux".equalsIgnoreCase(WSApplication.os)) {
@@ -83,9 +98,9 @@ public class WSApplication implements CommandLineRunner {
 		} else {
 			System.setProperty("webdriver.chrome.driver", "chromedriver.exe");
 		}
-		
-		
-		
+
+
+
 	}
 
 }
